@@ -4,16 +4,7 @@ WINNING_LINES = [
     (0, 4, 8), (2, 4, 6)              # Diagonals
 ]
 
-board = [None,None,None,None,None,None,None,None,None]
-
-def check_for_winner(board):
-    for a, b, c in WINNING_LINES:
-        if (board[a] == board[b] == board[c]) and (a != None):
-            return True
-    else:
-        return False
-
-
+# board = [None,None,None,None,None,None,None,None,None]
 
 
 def print_board(board):
@@ -43,6 +34,13 @@ def checks_board_isnt_full(board):
     return False
 
 
+def check_for_winner(board):
+    for a, b, c in WINNING_LINES:
+        if board[a] == board[b] == board[c] and board[a] is not None:
+            return True
+    return False
+
+
 
 
 def main():
@@ -51,17 +49,56 @@ def main():
     print_board(board)
 
     while checks_board_isnt_full(board):
-        player_X = int(input("Player X, enter your position: "))
+        while True:
+            try:
+                player_X = int(input("Player X, enter your position (1-9): "))
+            except ValueError:
+                print("Please enter a whole number from 1 to 9.")
+                continue
+
+            if player_X < 1 or player_X > 9:
+                print("Please enter a number from 1 to 9.")
+            elif board[player_X - 1] is not None:
+                print("That cell is occupied. Please choose another cell.")
+            else:
+                break
+
         board[player_X - 1] = "X" # type: ignore
         print_board(board)
 
         if check_for_winner(board):
-            print("You've won!")
+            print("Player X wins!")
+            break
+
+        if not checks_board_isnt_full(board):
+            print("It's a draw!")
+            break
 
 
-        player_O = int(input("Player Y, enter your position: "))
+        while True:
+            try:
+                player_O = int(input("Player O, enter your position (1-9): "))
+            except ValueError:
+                print("Please enter a whole number from 1 to 9.")
+                continue
+
+            if player_O < 1 or player_O > 9:
+                print("Please enter a number from 1 to 9.")
+            elif board[player_O - 1] is not None:
+                print("That cell is occupied. Please choose another cell.")
+            else:
+                break
+
         board[player_O - 1] = "O" # type: ignore
         print_board(board)
+
+        if check_for_winner(board):
+            print("Player O wins!")
+            break
+
+        if not checks_board_isnt_full(board):
+            print("It's a draw!")
+            break
 
 main()
 
